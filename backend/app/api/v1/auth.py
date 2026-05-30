@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from app.db.dependencies import get_db
 from app.schemas.user import UserRegister
 from app.schemas.user import UserResponse
+from app.schemas.user import UserLogin
+from app.schemas.user import TokenResponse
 from app.services.auth_service import AuthService
 
 router = APIRouter()
@@ -33,5 +35,29 @@ def register(
     except ValueError as e:
         raise HTTPException(
             status_code=400,
+            detail=str(e)
+        )
+
+
+# ADD THIS BELOW REGISTER
+@router.post(
+    "/login",
+    response_model=TokenResponse
+)
+def login(
+    user_data: UserLogin,
+    db: Session = Depends(get_db)
+):
+    try:
+
+        return AuthService.login_user(
+            db=db,
+            email=user_data.email,
+            password=user_data.password
+        )
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=401,
             detail=str(e)
         )
