@@ -9,6 +9,8 @@ from app.schemas.user import UserResponse
 from app.schemas.user import UserLogin
 from app.schemas.user import TokenResponse
 from app.services.auth_service import AuthService
+from app.dependencies.auth import get_current_user
+from app.models.user import User
 
 router = APIRouter()
 
@@ -61,3 +63,14 @@ def login(
             status_code=401,
             detail=str(e)
         )
+
+@router.get(
+    "/me",
+    response_model=UserResponse
+)
+def me(
+    current_user: User = Depends(
+        get_current_user
+    )
+):
+    return current_user
