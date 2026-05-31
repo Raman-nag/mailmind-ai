@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 
 from app.db.dependencies import get_db
 from app.dependencies.auth import get_current_user
+from app.agents.base.context import AgentContext
+from app.agents.orchestrator.agent_manager import AgentManager
 
 from app.models.user import User
 
@@ -188,14 +190,20 @@ def sync_gmail(
                         summary=summary
                     )
 
-                    ai_result = (
-                        EmailAIService
-                        .analyze_email(
-                            subject=subject,
-                            sender=sender,
-                            body=body
-                        )
+                    context = AgentContext(
+                        agent_type="deadline",
+                        payload={
+                            "subject": subject,
+                            "sender": sender,
+                            "body": body
+                        }
                     )
+
+                    result = AgentManager.execute(
+                        context
+                    )
+
+                    ai_result = result.data
 
                     EmailService.update_email_ai_fields(
                         db=db,

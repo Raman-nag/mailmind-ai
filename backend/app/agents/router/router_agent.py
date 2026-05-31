@@ -3,7 +3,9 @@ from app.agents.deadline.deadline_agent import DeadlineAgent
 from app.agents.reply.reply_agent import ReplyAgent
 from app.agents.search.search_agent import SearchAgent
 from app.agents.memory.memory_agent import MemoryAgent
-
+from app.agents.exceptions import (
+    AgentNotFoundException
+)
 class RouterAgent:
 
     AGENTS = {
@@ -24,7 +26,9 @@ class RouterAgent:
         )
 
         if not agent:
-            raise ValueError(
+            
+
+            raise AgentNotFoundException(
                 f"Unsupported agent type: {agent_type}"
             )
 

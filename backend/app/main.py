@@ -1,4 +1,5 @@
 import os
+import logging
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 from fastapi import FastAPI
@@ -10,6 +11,11 @@ from app.api.v1.emails import router as email_router
 from app.api.v1.dashboard import router as dashboard_router
 from app.api.v1.gmail import router as gmail_router
 from app.api.v1.gmail_sync import router as gmail_sync_router
+from app.api.v1 import agents
+
+logging.basicConfig(
+    level=logging.INFO
+)
 
 app = FastAPI(
     title=settings.APP_NAME,
@@ -53,6 +59,12 @@ app.include_router(
     gmail_sync_router,
     prefix="/api/v1/gmail",
     tags=["gmail"]
+)
+
+app.include_router(
+    agents.router,
+    prefix="/api/v1/agents",
+    tags=["Agents"]
 )
 @app.get("/")
 def root():
