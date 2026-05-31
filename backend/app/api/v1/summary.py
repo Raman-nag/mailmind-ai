@@ -4,7 +4,8 @@ from app.schemas.summary import (
     EmailSummaryRequest,
     EmailSummaryResponse
 )
-from app.services.gemini_service import GeminiService
+from app.agents.base.context import AgentContext
+from app.agents.orchestrator.agent_manager import AgentManager
 
 router = APIRouter()
 
@@ -17,10 +18,17 @@ def summarize_email(
     request: EmailSummaryRequest
 ):
 
-    summary = GeminiService.summarize_email(
-        request.email_content
+    context = AgentContext(
+        agent_type="summary",
+        payload={
+            "email_content": request.email_content
+        }
+    )
+
+    result = AgentManager.execute(
+        context
     )
 
     return EmailSummaryResponse(
-        summary=summary
+        summary=result.data["summary"]
     )

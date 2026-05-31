@@ -1,3 +1,5 @@
+from unittest import result
+
 from fastapi import APIRouter
 from fastapi import Depends
 from sqlalchemy.orm import Session
@@ -6,7 +8,10 @@ from app.db.dependencies import get_db
 from app.schemas.email import EmailCreate
 from app.schemas.email import EmailResponse
 from app.services.email_service import EmailService
-from app.services.gemini_service import GeminiService
+
+from app.agents.base.context import AgentContext
+from app.agents.orchestrator.agent_manager import AgentManager
+
 from app.dependencies.auth import get_current_user
 from app.models.user import User
 from fastapi import HTTPException
@@ -40,9 +45,18 @@ def create_email(
     current_user: User = Depends(get_current_user)
 ):
 
-    summary = GeminiService.summarize_email(
-        email_data.body
+    context = AgentContext(
+        agent_type="summary",
+        payload={
+            "email_content": email_data.body
+        }
     )
+
+    result = AgentManager.execute(
+        context
+    )
+
+    summary = result.data["summary"]
 
     email = EmailService.create_email(
         db=db,
@@ -162,9 +176,18 @@ def summarize_email(
             detail="Access denied"
         )
 
-    summary = GeminiService.summarize_email(
-        email.body
+    context = AgentContext(
+        agent_type="summary",
+        payload={
+            "email_content": email.body
+        }
     )
+
+    result = AgentManager.execute(
+        context
+    )
+
+    summary = result.data["summary"]
 
     return EmailService.update_email_summary(
         db=db,
