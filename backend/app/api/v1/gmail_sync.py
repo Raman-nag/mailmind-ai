@@ -31,13 +31,6 @@ from app.services.email_service import (
     EmailService
 )
 
-from app.services.gemini_service import (
-    GeminiService
-)
-
-from app.services.email_ai_service import (
-    EmailAIService
-)
 
 from app.repositories.email_repository import (
     EmailRepository
@@ -168,10 +161,10 @@ def sync_gmail(
 
                 try:
 
-                    summary = (
-                        GeminiService
-                        .summarize_email(
-                            f"""
+                    context = AgentContext(
+                        agent_type="summary",
+                        payload={
+                            "email_content": f"""
                             Subject:
                             {subject}
 
@@ -181,8 +174,14 @@ def sync_gmail(
                             Body:
                             {body[:5000]}
                             """
-                        )
+                        }
                     )
+
+                    result = AgentManager.execute(
+                        context
+                    )
+
+                    summary = result.data["summary"]
 
                     EmailService.update_email_summary(
                         db=db,

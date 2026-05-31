@@ -46,3 +46,31 @@ class GeminiService:
         return GeminiService.generate(
             prompt
         )
+    
+    @staticmethod
+    def generate_reply(
+        subject: str,
+        sender: str,
+        body: str
+    ) -> str:
+
+        prompt = f"""
+        You are an email assistant.
+
+        Generate a professional reply.
+
+        Subject:
+        {subject}
+
+        Sender:
+        {sender}
+
+        Original Email:
+        {body}
+
+        Return only the reply email.
+        """
+
+        return GeminiService.generate(
+            prompt
+        )
