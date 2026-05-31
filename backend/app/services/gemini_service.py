@@ -11,13 +11,24 @@ genai.configure(
 class GeminiService:
 
     @staticmethod
-    def summarize_email(
-        email_content: str
+    def generate(
+        prompt: str
     ) -> str:
 
         model = genai.GenerativeModel(
             "gemini-2.5-flash"
         )
+
+        response = model.generate_content(
+            prompt
+        )
+
+        return response.text
+
+    @staticmethod
+    def summarize_email(
+        email_content: str
+    ) -> str:
 
         prompt = f"""
         Summarize the following email.
@@ -32,8 +43,6 @@ class GeminiService:
         - Important people
         """
 
-        response = model.generate_content(
+        return GeminiService.generate(
             prompt
         )
-
-        return response.text

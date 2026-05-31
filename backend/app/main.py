@@ -1,8 +1,16 @@
+import os
+
+os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 from fastapi import FastAPI
 from app.api.v1.auth import router as auth_router
 from app.api.v1.health import router as health_router
 from app.core.settings import settings
 from app.api.v1.summary import router as summary_router
+from app.api.v1.emails import router as email_router
+from app.api.v1.dashboard import router as dashboard_router
+from app.api.v1.gmail import router as gmail_router
+from app.api.v1.gmail_sync import router as gmail_sync_router
+
 app = FastAPI(
     title=settings.APP_NAME,
     version="0.1.0"
@@ -23,7 +31,29 @@ app.include_router(
     prefix="/api/v1/summary",
     tags=["Summary"]
 )
+app.include_router(
+    email_router,
+    prefix="/api/v1/emails",
+    tags=["Emails"]
+)
 
+app.include_router(
+    dashboard_router,
+    prefix="/api/v1/dashboard",
+    tags=["Dashboard"]
+)
+
+app.include_router(
+    gmail_router,
+    prefix="/api/v1/gmail",
+    tags=["gmail"]
+)
+
+app.include_router(
+    gmail_sync_router,
+    prefix="/api/v1/gmail",
+    tags=["gmail"]
+)
 @app.get("/")
 def root():
     return {

@@ -15,7 +15,13 @@ class EmailResponse(BaseModel):
     sender: str
     subject: str
     body: str
+
     summary: str | None
+
+    priority: str | None
+    category: str | None
+    deadline: datetime | None
+
     received_at: datetime
 
     class Config:

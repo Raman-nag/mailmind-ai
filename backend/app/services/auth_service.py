@@ -1,8 +1,10 @@
 from app.core.security import hash_password
-from app.models.user import User
-from app.repositories.user_repository import UserRepository
 from app.core.security import verify_password
 from app.core.security import create_access_token
+
+from app.models.user import User
+from app.repositories.user_repository import UserRepository
+
 
 class AuthService:
 
@@ -34,7 +36,7 @@ class AuthService:
             db,
             user
         )
-    
+
     @staticmethod
     def login_user(
         db,

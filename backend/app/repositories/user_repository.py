@@ -25,14 +25,3 @@ class UserRepository:
         db.commit()
         db.refresh(user)
         return user
-    
-    @staticmethod
-    def get_by_email(
-        db,
-        email: str
-    ):
-        return (
-            db.query(User)
-            .filter(User.email == email)
-            .first()
-        )

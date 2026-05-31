@@ -52,6 +52,21 @@ class Email(Base):
         nullable=True
     )
 
+    priority: Mapped[str] = mapped_column(
+        String,
+        nullable=True
+    )
+
+    category: Mapped[str] = mapped_column(
+        String,
+        nullable=True
+    )
+
+    deadline: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=True
+    )
+
     received_at: Mapped[datetime] = mapped_column(
         DateTime,
         nullable=False
