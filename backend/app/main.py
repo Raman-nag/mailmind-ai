@@ -3,6 +3,7 @@ import logging
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 from fastapi import FastAPI
+from app.api.v1.memory import router as memory_router
 from app.api.v1.auth import router as auth_router
 from app.api.v1.health import router as health_router
 from app.core.settings import settings
@@ -26,6 +27,12 @@ app.include_router(
     health_router,
     prefix="/api/v1/health",
     tags=["Health"]
+)
+
+app.include_router(
+    memory_router,
+    prefix="/api/v1/memories",
+    tags=["Memory"]
 )
 app.include_router(
     auth_router,
