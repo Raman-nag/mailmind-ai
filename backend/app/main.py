@@ -13,7 +13,12 @@ from app.api.v1.dashboard import router as dashboard_router
 from app.api.v1.gmail import router as gmail_router
 from app.api.v1.gmail_sync import router as gmail_sync_router
 from app.api.v1 import agents
-
+from app.api.v1.rag import (
+    router as rag_router
+)
+from app.api.v1.chat import (
+    router as chat_router,
+)
 logging.basicConfig(
     level=logging.INFO
 )
@@ -22,7 +27,14 @@ app = FastAPI(
     title=settings.APP_NAME,
     version="0.1.0"
 )
-
+app.include_router(
+    rag_router
+)
+app.include_router(
+    chat_router,
+    prefix="/api/v1/chat",
+    tags=["Chat"],
+)
 app.include_router(
     health_router,
     prefix="/api/v1/health",
