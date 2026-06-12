@@ -1,5 +1,7 @@
 from datetime import datetime
-
+from app.rag.vector_service import (
+    VectorService
+)
 from fastapi import APIRouter
 from fastapi import Depends
 from sqlalchemy.orm import Session
@@ -131,6 +133,14 @@ def sync_gmail(
                 subject=subject,
                 body=body,
                 received_at=datetime.utcnow()
+            )
+
+            VectorService.vectorize_email(
+                email
+            )
+
+            print(
+                f"VECTORIZED: {subject}"
             )
 
             imported_count += 1

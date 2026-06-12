@@ -21,12 +21,17 @@ class VectorService:
         )
 
         for index, chunk in enumerate(chunks):
-
+            print("=" * 80)
+            print("VECTORIZING EMAIL")
+            print("SUBJECT:", email.subject)
+            print("CHUNK:", chunk[:100])
+            print("=" * 80)
             embedding = (
                 EmbeddingGenerator.generate(
                     chunk
                 )
             )
+
 
             collection.upsert(
                 ids=[
@@ -56,6 +61,9 @@ class VectorService:
                         "chunk_index": index
                     }
                 ]
+            )
+            print(
+                f"UPSERTED: {email.subject}"
             )
 
         return len(chunks)
