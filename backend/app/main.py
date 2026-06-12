@@ -3,6 +3,7 @@ import logging
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.memory import router as memory_router
 from app.api.v1.auth import router as auth_router
 from app.api.v1.health import router as health_router
@@ -26,6 +27,13 @@ logging.basicConfig(
 app = FastAPI(
     title=settings.APP_NAME,
     version="0.1.0"
+)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origin_regex=r"http://localhost:\d+",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 app.include_router(
     rag_router
