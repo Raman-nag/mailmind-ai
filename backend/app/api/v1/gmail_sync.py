@@ -1,4 +1,5 @@
 from datetime import datetime
+from app.core.logging import get_logger
 from app.rag.vector_service import (
     VectorService
 )
@@ -33,12 +34,17 @@ from app.services.email_service import (
     EmailService
 )
 
+from app.services.action_service import (
+    ActionService
+)
+
 
 from app.repositories.email_repository import (
     EmailRepository
 )
 
 router = APIRouter()
+logger = get_logger("mailmind.gmail_sync")
 
 
 @router.get("/sync")
@@ -53,6 +59,10 @@ def sync_gmail(
     )
 
     if token is None:
+        logger.info(
+            "Gmail sync skipped no_account user_id=%s",
+            current_user.id
+        )
         return {
             "message": "No Gmail account connected"
         }
@@ -62,13 +72,11 @@ def sync_gmail(
         .create_credentials(token)
     )
 
-    print("=" * 80)
-    print("GMAIL SYNC STARTED")
-    print("USER:", current_user.email)
-    print("ACCESS TOKEN:", bool(token.access_token))
-    print("REFRESH TOKEN:", bool(token.refresh_token))
-    print("EXPIRY:", token.expiry)
-    print("=" * 80)
+    logger.info(
+        "Gmail sync started user_id=%s token_expiry=%s",
+        current_user.id,
+        token.expiry
+    )
 
     service = GmailService.create_service(
         credentials
@@ -80,6 +88,10 @@ def sync_gmail(
 
     imported_count = 0
     summarized_count = 0
+    created_actions_count = 0
+    updated_actions_count = 0
+    completed_actions_count = 0
+    rejected_actions_count = 0
 
     for message in messages:
 
@@ -139,11 +151,55 @@ def sync_gmail(
                 email
             )
 
-            print(
-                f"VECTORIZED: {subject}"
+            logger.info(
+                "Email vectorized user_id=%s email_id=%s",
+                current_user.id,
+                email.id
             )
 
             imported_count += 1
+
+            try:
+
+                action_result = (
+                    ActionService
+                    .process_email_actions(
+                        db=db,
+                        email=email
+                    )
+                )
+
+                created_actions_count += action_result.get(
+                    "created_actions",
+                    0
+                )
+                updated_actions_count += action_result.get(
+                    "updated_actions",
+                    0
+                )
+                completed_actions_count += action_result.get(
+                    "completed_actions",
+                    0
+                )
+                rejected_actions_count += action_result.get(
+                    "rejected_actions",
+                    0
+                )
+
+                logger.info(
+                    "Actions processed user_id=%s email_id=%s result=%s",
+                    current_user.id,
+                    email.id,
+                    action_result
+                )
+
+            except Exception as e:
+
+                logger.exception(
+                    "Action extraction failed user_id=%s message_id=%s",
+                    current_user.id,
+                    message["id"]
+                )
 
             # Skip Gemini for very short emails
             if len(body.strip()) < 150:
@@ -161,8 +217,10 @@ def sync_gmail(
 
                 summarized_count += 1
 
-                print(
-                    f"SHORT EMAIL SUMMARY: {subject}"
+                logger.info(
+                    "Short email summarized user_id=%s email_id=%s",
+                    current_user.id,
+                    email.id
                 )
 
                 continue
@@ -230,45 +288,56 @@ def sync_gmail(
 
                     summarized_count += 1
 
-                    print(
-                        f"AI ANALYZED: {subject}"
+                    logger.info(
+                        "Email AI analyzed user_id=%s email_id=%s",
+                        current_user.id,
+                        email.id
                     )
 
                 except Exception as e:
 
-                    print("=" * 80)
-                    print("AI ANALYSIS FAILED")
-                    print("SUBJECT:", subject)
-                    print("ERROR:", str(e))
-                    print("=" * 80)
+                    logger.exception(
+                        "AI analysis failed user_id=%s message_id=%s",
+                        current_user.id,
+                        message["id"]
+                    )
 
                     summarized_count += 1
 
-                    print(
-                        f"SUMMARIZED: {subject}"
+                    logger.info(
+                        "Email marked summarized after AI failure user_id=%s email_id=%s",
+                        current_user.id,
+                        email.id
                     )
 
                 except Exception as e:
 
-                    print("=" * 80)
-                    print("SUMMARY FAILED")
-                    print("SUBJECT:", subject)
-                    print("ERROR:", str(e))
-                    print("=" * 80)
+                    logger.exception(
+                        "Summary failed user_id=%s message_id=%s",
+                        current_user.id,
+                        message["id"]
+                    )
 
         except Exception as e:
 
-            print("=" * 80)
-            print("EMAIL IMPORT FAILED")
-            print("MESSAGE ID:", message["id"])
-            print("ERROR:", str(e))
-            print("=" * 80)
+            logger.exception(
+                "Email import failed user_id=%s message_id=%s",
+                current_user.id,
+                message["id"]
+            )
 
-    print("=" * 80)
-    print("SYNC COMPLETE")
-    print("IMPORTED:", imported_count)
-    print("SUMMARIZED:", summarized_count)
-    print("=" * 80)
+    logger.info(
+        "Gmail sync completed user_id=%s imported=%s summarized=%s "
+        "created_actions=%s updated_actions=%s completed_actions=%s "
+        "rejected_actions=%s",
+        current_user.id,
+        imported_count,
+        summarized_count,
+        created_actions_count,
+        updated_actions_count,
+        completed_actions_count,
+        rejected_actions_count
+    )
 
     return {
         "imported_emails": imported_count,

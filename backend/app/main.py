@@ -1,5 +1,5 @@
 import os
-import logging
+from contextlib import asynccontextmanager
 
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
 from fastapi import FastAPI
@@ -20,14 +20,34 @@ from app.api.v1.rag import (
 from app.api.v1.chat import (
     router as chat_router,
 )
-logging.basicConfig(
-    level=logging.INFO
+from app.core.logging import configure_logging
+from app.middleware.demo_access_validator import DemoAccessValidator
+from app.middleware.error_logging import ErrorLoggingMiddleware
+from app.modules.feedback.routers.feedback import router as feedback_router
+from app.services.expired_user_cleanup_scheduler import (
+    ExpiredUserCleanupScheduler
 )
+
+configure_logging()
+
+cleanup_scheduler = ExpiredUserCleanupScheduler()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    cleanup_scheduler.start()
+    try:
+        yield
+    finally:
+        await cleanup_scheduler.stop()
 
 app = FastAPI(
     title=settings.APP_NAME,
-    version="0.1.0"
+    version="0.1.0",
+    lifespan=lifespan
 )
+app.add_middleware(ErrorLoggingMiddleware)
+app.add_middleware(DemoAccessValidator)
 app.add_middleware(
     CORSMiddleware,
     allow_origin_regex=r"http://localhost:\d+",
@@ -92,6 +112,11 @@ app.include_router(
     agents.router,
     prefix="/api/v1/agents",
     tags=["Agents"]
+)
+app.include_router(
+    feedback_router,
+    prefix="/api/v1/feedback",
+    tags=["Feedback"]
 )
 @app.get("/")
 def root():

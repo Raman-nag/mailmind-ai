@@ -1,6 +1,10 @@
 from app.rag.chunking import EmailChunker
+from app.core.logging import get_logger
 from app.rag.embeddings import EmbeddingGenerator
 from app.rag.vector_store import vector_store
+
+
+logger = get_logger("mailmind.chroma")
 
 
 class VectorService:
@@ -67,3 +71,22 @@ class VectorService:
             )
 
         return len(chunks)
+
+    @staticmethod
+    def delete_user_vectors(
+        user_id: str
+    ) -> None:
+        collection = (
+            vector_store.get_email_collection()
+        )
+
+        collection.delete(
+            where={
+                "user_id": user_id
+            }
+        )
+
+        logger.info(
+            "Deleted Chroma vectors user_id=%s",
+            user_id
+        )

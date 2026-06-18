@@ -116,3 +116,18 @@ class EmailRepository:
             )
             .first()
         )
+
+    @staticmethod
+    def get_urgent_by_user_id(
+        db,
+        user_id: str
+    ):
+        return (
+            db.query(Email)
+            .filter(
+                Email.user_id == user_id,
+                Email.priority == "HIGH"
+            )
+            .order_by(Email.received_at.desc())
+            .all()
+        )

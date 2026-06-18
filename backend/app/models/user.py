@@ -1,7 +1,8 @@
 import uuid
+from datetime import datetime
 
 from sqlalchemy import Boolean, DateTime, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 
@@ -36,7 +37,36 @@ class User(Base):
         default=True
     )
 
-    expires_at: Mapped[DateTime] = mapped_column(
+    expires_at: Mapped[datetime | None] = mapped_column(
         DateTime,
         nullable=True
+    )
+
+    demo_started_at: Mapped[datetime | None] = mapped_column(
+        DateTime,
+        nullable=True
+    )
+
+    is_demo_expired: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False
+    )
+
+    feedback_submitted: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False
+    )
+
+    actions = relationship(
+        "Action",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+
+    feedback_items = relationship(
+        "Feedback",
+        back_populates="user",
+        cascade="all, delete-orphan"
     )

@@ -4,7 +4,7 @@ from app.core.settings import settings
 
 from app.core.settings import settings
 
-print("GEMINI KEY:", settings.GEMINI_API_KEY[:10])
+#print("GEMINI KEY:", settings.GEMINI_API_KEY[:10])
 genai.configure(
     api_key=settings.GEMINI_API_KEY
 )

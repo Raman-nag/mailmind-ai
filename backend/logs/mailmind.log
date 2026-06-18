@@ -1,0 +1,59 @@
+2026-06-19 00:36:38,693 | INFO | mailmind.scheduler | Expired user cleanup scheduler started interval_seconds=3600
+2026-06-19 00:36:44,280 | INFO | mailmind.scheduler | Expired user cleanup scheduler stopped
+2026-06-19 00:36:54,675 | INFO | mailmind.scheduler | Expired user cleanup scheduler started interval_seconds=3600
+2026-06-19 00:37:20,767 | INFO | mailmind.scheduler | Expired user cleanup scheduler stopped
+2026-06-19 00:37:34,539 | INFO | mailmind.scheduler | Expired user cleanup scheduler started interval_seconds=3600
+2026-06-19 00:37:35,504 | INFO | mailmind.scheduler | Expired user cleanup scheduler stopped
+2026-06-19 00:37:47,312 | INFO | mailmind.scheduler | Expired user cleanup scheduler started interval_seconds=3600
+2026-06-19 00:38:37,462 | INFO | mailmind.scheduler | Expired user cleanup scheduler stopped
+2026-06-19 00:38:49,555 | INFO | mailmind.scheduler | Expired user cleanup scheduler started interval_seconds=3600
+2026-06-19 00:38:52,384 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\Users\raman\Desktop\mailmind-ai\backend\.venv\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-06-19 00:38:52,877 | INFO | mailmind.auth | User registered user_id=29c92a9d-ed20-44a8-b8ea-5d59e0cb2d71 email=stage2-expired-cf773e3adf054d30a9d01be0794553f3@example.com
+2026-06-19 00:38:52,923 | INFO | httpx | HTTP Request: POST http://testserver/api/v1/auth/register "HTTP/1.1 200 OK"
+2026-06-19 00:38:53,359 | INFO | mailmind.auth | Login succeeded user_id=29c92a9d-ed20-44a8-b8ea-5d59e0cb2d71
+2026-06-19 00:38:53,705 | INFO | httpx | HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 200 OK"
+2026-06-19 00:38:54,382 | INFO | mailmind.access | Blocked expired demo access for user_id=29c92a9d-ed20-44a8-b8ea-5d59e0cb2d71 path=/api/v1/auth/me
+2026-06-19 00:38:54,426 | INFO | httpx | HTTP Request: GET http://testserver/api/v1/auth/me "HTTP/1.1 403 Forbidden"
+2026-06-19 00:38:55,141 | INFO | httpx | HTTP Request: POST http://testserver/api/v1/feedback "HTTP/1.1 201 Created"
+2026-06-19 00:39:05,394 | INFO | mailmind.scheduler | Expired user cleanup scheduler stopped
+2026-06-19 00:39:17,478 | INFO | mailmind.scheduler | Expired user cleanup scheduler started interval_seconds=3600
+2026-06-19 00:39:19,044 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\Users\raman\Desktop\mailmind-ai\backend\.venv\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-06-19 00:39:19,569 | INFO | mailmind.auth | User registered user_id=debd5d32-809a-4e7c-8976-f3e1acc5377c email=stage2-expired-17b001c8df2e44be82e2f4ca5c1914ec@example.com
+2026-06-19 00:39:19,613 | INFO | httpx | HTTP Request: POST http://testserver/api/v1/auth/register "HTTP/1.1 200 OK"
+2026-06-19 00:39:19,971 | INFO | mailmind.auth | Login succeeded user_id=debd5d32-809a-4e7c-8976-f3e1acc5377c
+2026-06-19 00:39:20,013 | INFO | httpx | HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 200 OK"
+2026-06-19 00:39:20,543 | INFO | mailmind.access | Blocked expired demo access for user_id=debd5d32-809a-4e7c-8976-f3e1acc5377c path=/api/v1/auth/me
+2026-06-19 00:39:20,584 | INFO | httpx | HTTP Request: GET http://testserver/api/v1/auth/me "HTTP/1.1 403 Forbidden"
+2026-06-19 00:39:21,005 | INFO | httpx | HTTP Request: POST http://testserver/api/v1/feedback "HTTP/1.1 201 Created"
+2026-06-19 00:39:22,208 | INFO | mailmind.cleanup | Cleanup completed user_id=ec955728-7cf4-4dc6-9e97-db5d4a1b92f8 result={'actions': 1, 'memories': 1, 'emails': 1, 'gmail_tokens': 1, 'gmail_accounts': 1, 'chroma_cleanup': True, 'feedback': 1, 'users': 1}
+2026-06-19 00:39:31,359 | INFO | mailmind.scheduler | Expired user cleanup scheduler stopped
+2026-06-19 00:39:42,738 | INFO | mailmind.scheduler | Expired user cleanup scheduler started interval_seconds=3600
+2026-06-19 00:39:45,419 | WARNING | passlib.handlers.bcrypt | (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "C:\Users\raman\Desktop\mailmind-ai\backend\.venv\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-06-19 00:39:45,931 | INFO | mailmind.auth | User registered user_id=5a29e524-50fd-44cc-ba08-561e7d54670c email=stage2-expired-9524bac93c084f52a63990190fe7e0d1@example.com
+2026-06-19 00:39:45,977 | INFO | httpx | HTTP Request: POST http://testserver/api/v1/auth/register "HTTP/1.1 200 OK"
+2026-06-19 00:39:46,384 | INFO | mailmind.auth | Login succeeded user_id=5a29e524-50fd-44cc-ba08-561e7d54670c
+2026-06-19 00:39:46,428 | INFO | httpx | HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 200 OK"
+2026-06-19 00:39:47,021 | INFO | mailmind.access | Blocked expired demo access for user_id=5a29e524-50fd-44cc-ba08-561e7d54670c path=/api/v1/auth/me
+2026-06-19 00:39:47,064 | INFO | httpx | HTTP Request: GET http://testserver/api/v1/auth/me "HTTP/1.1 403 Forbidden"
+2026-06-19 00:39:47,549 | INFO | httpx | HTTP Request: POST http://testserver/api/v1/feedback "HTTP/1.1 201 Created"
+2026-06-19 00:39:48,902 | INFO | mailmind.cleanup | Cleanup completed user_id=55e44330-ebaf-47f3-9e0d-cbb12760b615 result={'actions': 1, 'memories': 1, 'emails': 1, 'gmail_tokens': 1, 'gmail_accounts': 1, 'chroma_cleanup': True, 'feedback': 1, 'users': 1}
+2026-06-19 00:39:50,077 | INFO | mailmind.scheduler | Marked user expired user_id=9aa5d159-8052-46ed-829a-001b83416d6f
+2026-06-19 00:39:50,487 | INFO | mailmind.cleanup | Cleanup completed user_id=9aa5d159-8052-46ed-829a-001b83416d6f result={'actions': 1, 'memories': 1, 'emails': 1, 'gmail_tokens': 1, 'gmail_accounts': 1, 'chroma_cleanup': True, 'feedback': 1, 'users': 1}
+2026-06-19 00:39:56,277 | INFO | mailmind.scheduler | Expired user cleanup scheduler stopped
+2026-06-19 00:40:08,723 | INFO | mailmind.scheduler | Expired user cleanup scheduler started interval_seconds=3600
+2026-06-19 00:41:29,909 | INFO | mailmind.scheduler | Expired user cleanup scheduler started interval_seconds=3600

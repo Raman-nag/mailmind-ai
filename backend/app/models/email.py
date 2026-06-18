@@ -8,6 +8,7 @@ from sqlalchemy import DateTime
 
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
 
 from app.db.base import Base
 
@@ -75,4 +76,10 @@ class Email(Base):
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
         default=datetime.utcnow
+    )
+
+    actions = relationship(
+        "Action",
+        back_populates="email",
+        cascade="all, delete-orphan"
     )

@@ -1,5 +1,5 @@
-import logging
+from app.core.logging import get_logger
 
-logger = logging.getLogger(
+logger = get_logger(
     "mailmind_agents"
 )

@@ -3,6 +3,10 @@ from app.agents.deadline.deadline_agent import DeadlineAgent
 from app.agents.reply.reply_agent import ReplyAgent
 from app.agents.search.search_agent import SearchAgent
 from app.agents.memory.memory_agent import MemoryAgent
+from app.agents.action.action_agent import ActionAgent
+from app.agents.reminder.reminder_agent import ReminderAgent
+from app.agents.priority.priority_agent import PriorityAgent
+from app.agents.recommendation.recommendation_agent import RecommendationAgent
 from app.agents.exceptions import (
     AgentNotFoundException
 )
@@ -14,6 +18,10 @@ class RouterAgent:
         "reply": ReplyAgent,
         "search": SearchAgent,
         "memory": MemoryAgent,
+        "action": ActionAgent,
+        "reminder": ReminderAgent,
+        "priority": PriorityAgent,
+        "recommendation": RecommendationAgent,
     }
 
     @staticmethod
