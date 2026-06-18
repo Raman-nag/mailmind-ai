@@ -30,7 +30,9 @@ from app.services.expired_user_cleanup_scheduler import (
 
 configure_logging()
 
-cleanup_scheduler = ExpiredUserCleanupScheduler()
+cleanup_scheduler = ExpiredUserCleanupScheduler(
+    interval_seconds=settings.EXPIRED_USER_CLEANUP_INTERVAL_SECONDS
+)
 
 
 @asynccontextmanager

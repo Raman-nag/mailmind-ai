@@ -57,6 +57,16 @@ class ExpiredUserCleanupScheduler:
                     user_id
                 )
 
+            cleanup_eligible_users = (
+                ExpiryService.get_cleanup_eligible_users(db)
+            )
+            cleanup_eligible_user_ids = [
+                user.id
+                for user in cleanup_eligible_users
+            ]
+            db.commit()
+
+            for user_id in cleanup_eligible_user_ids:
                 CleanupService.cleanup_user_data(
                     db,
                     user_id

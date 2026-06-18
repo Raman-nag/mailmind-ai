@@ -3,11 +3,13 @@ from fastapi import Request
 import requests
 
 from app.core.settings import settings
+from app.core.logging import get_logger
 from app.services.google_oauth_service import (
     GoogleOAuthService
 )
 
 router = APIRouter()
+logger = get_logger("mailmind.gmail")
 
 
 @router.get("/connect")
@@ -20,8 +22,9 @@ def connect_gmail():
         prompt="consent"
     )
 
-    print("AUTH URL:")
-    print(authorization_url)
+    logger.info(
+        "Generated Gmail authorization URL"
+    )
 
     return {
         "authorization_url": authorization_url,

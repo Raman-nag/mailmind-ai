@@ -53,6 +53,11 @@ class User(Base):
         nullable=False
     )
 
+    cleanup_after_at: Mapped[datetime | None] = mapped_column(
+        DateTime,
+        nullable=True
+    )
+
     feedback_submitted: Mapped[bool] = mapped_column(
         Boolean,
         default=False,
