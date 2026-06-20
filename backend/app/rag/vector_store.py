@@ -10,9 +10,10 @@ class ChromaVectorStore:
     """
 
     def __init__(self):
-        self.client = chromadb.PersistentClient(
-            path=settings.CHROMA_DB_PATH
-        )
+        # self.client = chromadb.PersistentClient(
+        #     path=settings.CHROMA_DB_PATH
+        # )
+        self.client = chromadb.EphemeralClient()
 
     def get_email_collection(self) -> Collection:
         """
