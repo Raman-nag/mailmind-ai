@@ -5,5 +5,8 @@ __pycache__/
 *.pyc
 
 .venv/
+backend/venv/
 
 .vscode/
+backend/logs/
+backend/chromadb/

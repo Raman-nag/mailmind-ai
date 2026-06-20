@@ -1,7 +1,9 @@
 import os
 from contextlib import asynccontextmanager
 
-os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+if os.getenv("ENVIRONMENT", "development") != "production":
+    os.environ.setdefault("OAUTHLIB_INSECURE_TRANSPORT", "1")
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.memory import router as memory_router
@@ -50,13 +52,22 @@ app = FastAPI(
 )
 app.add_middleware(ErrorLoggingMiddleware)
 app.add_middleware(DemoAccessValidator)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origin_regex=r"http://localhost:\d+",
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+if settings.ENVIRONMENT == "development":
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origin_regex=r"http://localhost:\d+",
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.CORS_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 app.include_router(
     rag_router
 )

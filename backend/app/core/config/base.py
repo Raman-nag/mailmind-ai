@@ -27,6 +27,13 @@ class BaseAppSettings(BaseSettings):
     GOOGLE_CLIENT_SECRET: str
     GOOGLE_REDIRECT_URI: str
 
+    CORS_ALLOWED_ORIGINS: str = (
+        "http://localhost:3000,"
+        "http://localhost:5173,"
+        "http://localhost:8080"
+        "http://localhost:52087"
+    )
+
     CHROMA_DB_PATH: str = Field(
         validation_alias=AliasChoices(
             "CHROMA_DB_PATH",
@@ -41,11 +48,20 @@ class BaseAppSettings(BaseSettings):
     DEMO_CLEANUP_GRACE_HOURS: int = 24
     EXPIRED_USER_CLEANUP_INTERVAL_SECONDS: int = 3600
 
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=True,
         extra="ignore"
     )
+
+    @property
+    def CORS_ORIGINS(self) -> list[str]:
+        return [
+            origin.strip()
+            for origin in self.CORS_ALLOWED_ORIGINS.split(",")
+            if origin.strip()
+        ]
 
     @property
     def JWT_SECRET(self) -> str:
